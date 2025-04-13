@@ -6,7 +6,7 @@ namespace BucketSort
     {
         public static int[] bucketSort(int[] arr)
         {
-            int range = 5;
+            int range = 2;
             int max = int.MinValue;
             int min = int.MaxValue;
             for(int i = 0; i < arr.Length; i++)
@@ -29,8 +29,10 @@ namespace BucketSort
             }
             for(int i = 0; i < arr.Length; i++)
             {
-                
-                buckets[arr[i] / range - 1].Add(arr[i]);
+                int x = arr[i] / range;
+                if (x < 0) x = 0;
+                if (x >= max / range) x = buckets.Length - 1;
+                buckets[x].Add(arr[i]);
             }
 
             for(int i = 0; i < buckets.Length; i++)
@@ -38,15 +40,17 @@ namespace BucketSort
                 buckets[i] = InsertionSort(buckets[i].ToArray<int>()).ToList();
             }
 
+            List<int> list = new List<int>();
             for(int i = 0; i < buckets.Length; i++)
             {
                 for(int j = 0; j < buckets[i].Count; j++)
                 {
-                    arr[i] = buckets[i][j];
+                    if (buckets[i].Count == 0) continue;
+                    list.Add(buckets[i][j]);
                 }
             }
-
-            return arr;
+            ;
+            return list.ToArray();
 
 
         }
@@ -81,18 +85,18 @@ namespace BucketSort
 
         static void Main(string[] args)
         {
-            int[] arr = new int[100];
+            int[] arr = new int[10];
             Random random = new Random();
             for(int i = 0; i < arr.Length; i++)
             {
-                arr[i] = (random.Next(0, 100));
+                arr[i] = (random.Next(0, 10));
             }
 
             arr = bucketSort(arr);
 
             for(int i = 0; i < arr.Length; i++)
             {
-                Console.WriteLine(arr);
+                Console.WriteLine(arr[i]);
             }
         }
     }
